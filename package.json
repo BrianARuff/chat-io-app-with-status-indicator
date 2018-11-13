@@ -1,0 +1,18 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "A chat app",
+  "main": "index.js",
+  "author": "Brian Ruff",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="/index.css">
+        <title>Socket IO App</title>
+    </head>
+
+    <body>
+        <ul id="messages"></ul>
+        <form action="" id="#form">
+            <div id="typing_on" class="status-indicator" ></div>
+            <input id="m" autocomplete="off" /><button>Send</button>
+        </form>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            const user = "Brian";
+            $(function() {
+                var socket = io();
+                $("form").submit(function() {
+                    socket.emit("chat message", $("#m").val());
+                    $("#m").val("");
+                    return false;
+                });
+                socket.on("chat message", function(msg) {
+                    console.log(msg, user);
+                    $("#messages").append($("<li>").text(user + ": " + msg));
+                });
+            });
+            // --- --- //
+            var textarea = $("#m");
+            var typingStatus = $("#typing_on");
+            var lastTypedTime = new Date(0);
+            var typingDelayMillis = 3000;
+
+            function refreshTypingStatus() {
+                if (
+                    !textarea.is(":focus") ||
+                    textarea.val() == "" ||
+                    new Date().getTime() - lastTypedTime.getTime() >
+                        typingDelayMillis
+                ) {
+                    typingStatus.html("");
+                } else {
+                    typingStatus.html(`${user} is typing...`);
+                    $('div').css("padding", "10px 20px")
+                }
+            }
+            function updateLastTypedTime() {
+                lastTypedTime = new Date();
+            }
+
+            setInterval(refreshTypingStatus, 100);
+            textarea.keypress(updateLastTypedTime);
+            textarea.blur(refreshTypingStatus);
+        </script>
+    </body>
+</html>
